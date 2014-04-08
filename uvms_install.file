@@ -1,0 +1,31 @@
+#
+#JREPATH : Path of your Jre/Jdk folder                          
+ JREPATH /usr/lib/jvm/java-1.7.0-openjdk-1.7.0.51.x86_64/jre
+
+#INSTALLDIR : UniViewer Management Server root directory           
+ INSTALLDIR /apps/uvms
+
+#NODE : UniViewer Management Server node name                
+ NODE default_value
+
+#CENTRAL_HOST : UniViewer Management Server host name                
+ CENTRAL_HOST default_value
+
+#CENTRALPORT : UniViewer Management Server main port number         
+ CENTRALPORT 4184
+
+#SSLPORT : UniViewer Management Server SSL port number          
+ SSLPORT 4443
+
+#CENTRALLOGIN : UniViewer Management Server Administrator Login ID   
+ CENTRALLOGIN admin
+
+#CENTRALPASSWD : UniViewer Management Server Administrator Password   
+ CENTRALPASSWD 21232f297a57a5a743894a0e4a801fc3icLLdpgNrdY=
+
+#TYPE_CLUSTER : Please enter the type of clustering installation     
+ TYPE_CLUSTER n
+
+#TYPE_DATABASE : Please select type of database that you want use     
+ TYPE_DATABASE e
+

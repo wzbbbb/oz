@@ -1,0 +1,76 @@
+#
+# CLUSTERTYPE : 
+ CLUSTERTYPE no
+
+# UVMSNOW : Do you want to register to the UVMS now             
+ UVMSNOW y
+
+# CENTRALHOST : UniViewer Management Server hostname                
+ CENTRALHOST 10.0.11.3
+
+# CENTRALPORT : UniViewer Management Server port number             
+ CENTRALPORT 4184
+
+# CENTRALLOGIN : UniViewer Management Server administrator login ID  
+ CENTRALLOGIN admin
+
+# CENTRALPASSWD : UniViewer Management Server administrator password  
+ CENTRALPASSWD admin
+
+# COMPANY : DUAS company name              
+ COMPANY FLS600
+
+# NODE : DUAS node name                 
+ NODE NODE_DUMP
+
+# NODETAG : DUAS node tags                 
+ NODETAG 
+
+# NODEHOST : DUAS hostname                  
+ NODEHOST default_value
+
+# INSTALLDIR : DUAS root directory (full path)
+ INSTALLDIR /apps/du/600/FLS600_NODE_DUMP
+
+# AREA_A : Do you want to configure DUAS Application area (A)? 
+ AREA_A y
+
+# AREA_I : Do you want to configure DUAS Integration area (I)? 
+ AREA_I y
+
+# AREA_S : Do you want to configure DUAS Simulation  area (S)? 
+ AREA_S y
+
+# INSTALL_SAP : Do you want to remove(r), keep(k) or activate(a) a manager for SAP solutions ("r", "k" or "a", default is "k")?
+ INSTALL_SAP k
+
+# CONFIG_SAP : If you have already defined a configuration, give the full path of the folder containing your "uxjcs.ini" file, either hit return ?
+ CONFIG_SAP 
+
+# INSTALL_OAPP : Do you want to remove(r), keep(k) or activate(a) a manager for Oracle Application ("r", "k" or "a", default is "k")?
+ INSTALL_OAPP k
+
+# CONFIG_OAPP : If you have already defined a configuration, give the full path of the folder containing your "uxoapp_db_user.xml" file, either hit return ?
+ CONFIG_OAPP 
+
+# INSTALL_JAVA : Do you want to remove(r), keep(k) or activate(a) a manager for Java ("r", "k" or "a", default is "k")?
+ INSTALL_JAVA r
+
+# CONFIG_JAVA : If you have already defined a configuration, give the full path of the folder containing your "server.xml" file, either hit return ?
+ CONFIG_JAVA 
+
+# PORTDEF : Do you want to use default port numbers?  
+ PORTDEF n
+
+# PORT : Enter the DUAS TCP port base number
+ PORT 12000
+
+# ADMUSER : Give the already existing username, by default root user will be administrator
+ ADMUSER univa
+
+# EXECPATH : Enter the full path to the binaries directory
+ EXECPATH default_value
+
+# LOGPATH : Enter the full path to the log directory
+ LOGPATH default_value
+
