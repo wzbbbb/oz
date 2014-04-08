@@ -1,0 +1,83 @@
+<template>
+  <name>CentOS-6.5-X86_64</name>
+  <os>
+    <name>CentOS-6</name>
+    <version>5</version>
+    <arch>x86_64</arch>
+    <install type='iso'>
+      <iso>file:/root/CentOS-6.5-x86_64-bin-DVD1.iso</iso>
+      <!--<iso>file:/root/CentOS-6.5-x86_64-minimal.iso</iso> -->
+    </install>
+    <rootpw>Ors12a90</rootpw>
+  </os>
+  <description>CentOS 6.5</description>
+  <!--<files> 
+    <file name='/etc/hosts'>
+127.0.0.1   localhost uvms1
+    </file>
+  </files> -->
+  <commands>
+    <command name='network-config'>
+cat > /etc/sysconfig/network-scripts/ifcfg-eth0 &lt;&lt; EOF
+DEVICE="eth0"
+BOOTPROTO=dhcp
+NM_CONTROLLED="yes"
+ONBOOT="yes"
+EOF
+    </command>
+    <!--<command name='lockroot'> 
+passwd -l root
+    </command> -->
+    <command name='useradd univa'> 
+useradd univa -u 501 -d /home/univa -s /bin/bash
+echo "univauniva" | passwd univa --stdin
+echo "Ors12a90"  | passwd root --stdin
+echo "nameserver 192.168.115.3" > /etc/resolv.conf
+<!-- echo "NOZEROCONF=yes" >> /etc/sysconfig/network -->
+    </command>
+    <command name='sshd_config'> 
+sed 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config >/tmp/ttt.config
+cat /tmp/ttt.config > /etc/ssh/sshd_config
+sed 's/HOSTNAME=localhost.localdomain/HOSTNAME=uvms1/' /etc/sysconfig/network > /tmp/ttt.host
+cat /tmp/ttt.host > /etc/sysconfig/network 
+hostname uvms1
+echo "127.0.0.1   localhost uvms1" > /etc/hosts
+    </command>
+    <command name='packages'>
+yum -y update
+<!-- cfn support
+yum -y install perl python python-setuptools cloud-init python-pip
+pip-python install argparse 'boto==2.5.2' heat-cfntools
+cfn-create-aws-symlinks -source /usr/bin  #should be 2"-" before source      -->
+rpm -Uvh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+yum -y install cloud-init
+    </command>
+    <command name='post-configuration'>
+chmod +x /etc/rc.d/rc.local
+chkconfig --level 345 sshd on
+rm -rf /etc/udev/rules.d/70-persistent-net.rules
+/sbin/service iptables stop
+    </command>
+    <command name='uvms'>
+yum -y install java-1.7.0-openjdk.x86_64
+if [ $? -eq 0 ] ; then
+  mkdir -p /apps/uvms
+  cd /root
+  curl -O 192.168.115.41/download/univiewer_server_6.2.01_all_unix.taz
+  tar zxvf univiewer_server_6.2.01_all_unix.taz
+  cd /root/univiewer_server_6.2.01_all_unix
+  curl -O 192.168.115.41/download/uvms_install.file
+  mv uvms_install.file install.file
+  ./unirun -i -s install.file
+  if [ $? -ne 1000 ] ; then
+    echo "HOST=uvms1 NODE=uvms1_MgtServer PRODUCT=UNIVIEWER VERSION=6.0 DUAS UNTIL=20191231 LICENSE=G3SH7-VKFY6-OWTG5-S0WWZ-E5RDD-R9C7P" > /apps/uvms/uvms1_MgtServer/data/licenses.txt
+    echo "HOST=uvms1 NODE=uvms1_MgtServer PRODUCT=UNIVIEWER VERSION=6.0 WEBUVC UNTIL=20191231 LICENSE=AO8SD-WG6KN-03VDX-FI942-CYFWR-0EAHK" >>/apps/uvms/uvms1_MgtServer/data/licenses.txt
+    rm -f /root/univiewer_server_6.2.01_all_unix.taz
+    rm -rf /root/univiewer_server_6.2.01_all_unix
+  fi
+else 
+  exit 1
+fi
+    </command>
+  </commands>
+</template>

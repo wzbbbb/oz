@@ -1,0 +1,101 @@
+<template>
+  <name>CentOS-6.5-X86_64</name>
+  <os>
+    <name>CentOS-6</name>
+    <version>5</version>
+    <arch>x86_64</arch>
+    <install type='iso'>
+      <iso>file:/root/CentOS-6.5-x86_64-bin-DVD1.iso</iso>
+      <!--<iso>file:/root/CentOS-6.5-x86_64-minimal.iso</iso> -->
+    </install>
+    <rootpw>Ors12a90</rootpw>
+  </os>
+  <description>CentOS 6.5</description>
+  <disk>
+    <size>15</size>
+  </disk>
+  <!--<files> 
+    <file name='/etc/hosts'>
+127.0.0.1   localhost uvms1
+    </file>
+  </files> -->
+  <commands>
+    <command name='network-config'>
+cat > /etc/sysconfig/network-scripts/ifcfg-eth0 &lt;&lt; EOF
+DEVICE="eth0"
+BOOTPROTO=dhcp
+NM_CONTROLLED="yes"
+ONBOOT="yes"
+EOF
+    </command>
+    <!--<command name='lockroot'> 
+passwd -l root
+    </command> -->
+    <command name='useradd univa'> 
+useradd univa -u 501 -d /home/univa -s /bin/bash
+echo "univauniva" | passwd univa --stdin
+echo "Ors12a90"  | passwd root --stdin
+echo "nameserver 192.168.115.3" > /etc/resolv.conf
+<!-- echo "NOZEROCONF=yes" >> /etc/sysconfig/network -->
+    </command>
+    <command name='sshd_config'> 
+sed 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config >/tmp/ttt.config
+cat /tmp/ttt.config > /etc/ssh/sshd_config
+sed 's/HOSTNAME=localhost.localdomain/HOSTNAME=dudmp1/' /etc/sysconfig/network > /tmp/ttt.host
+cat /tmp/ttt.host > /etc/sysconfig/network 
+hostname dudmp1
+echo "127.0.0.1   localhost dudmp1" > /etc/hosts
+echo "10.0.11.3   uvms1" >> /etc/hosts
+    </command>
+    <command name='packages'>
+yum -y update
+<!-- cfn support
+yum -y install perl python python-setuptools cloud-init python-pip
+pip-python install argparse 'boto==2.5.2' heat-cfntools
+cfn-create-aws-symlinks -source /usr/bin  #should be 2"-" before source      -->
+rpm -Uvh http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+yum -y install cloud-init
+    </command>
+    <command name='post-configuration'>
+/sbin/service iptables stop
+mkdir /cases
+mkdir /windata
+yum -y install nfs-utils.x86_64
+yum -y install glibc.i686
+yum -y install libgcc.i686
+echo "192.168.115.9:/cases   /cases   nfs    auto  0  0" >> /etc/fstab
+echo "192.168.115.9:/windata   /windata   nfs    auto  0  0" >> /etc/fstab
+chmod +x /etc/rc.d/rc.local
+chkconfig --level 345 sshd on
+chkconfig --level 345 rpcbind on
+rm -rf /etc/udev/rules.d/70-persistent-net.rules
+    </command>
+    <command name='dudmp6'>
+mkdir -p /apps/du/600
+chown univa:univa -R /apps
+mkdir -p /home/zwa/home/pj31_dudmp_v6/
+chown univa:univa -R /home/zwa
+cd /home/zwa/home/pj31_dudmp_v6/
+curl -O 192.168.115.41/download/template.install.file
+mkdir -p /etc/daenv/
+cd /etc/daenv/
+curl -O 192.168.115.41/download/Untaz
+curl -O 192.168.115.41/download/dudmp6.sh
+chmod 555 /etc/daenv/dudmp6.sh
+chmod 555 /etc/daenv/Untaz
+echo "alias dudmp6=/etc/daenv/dudmp6.sh" >> ~univa/.bashrc
+echo "alias untaz=/etc/daenv/Untaz" >> ~univa/.bashrc
+echo "alias dudmp6=/etc/daenv/dudmp6.sh" >> ~root/.bashrc
+echo "alias untaz=/etc/daenv/Untaz" >> ~root/.bashrc
+cd /apps/du/600
+curl -O 192.168.115.41/download/du_as_6.0.05_linux_26.taz
+tar zxvf du_as_6.0.05_linux_26.taz
+ln -s du_as_6.0.05_linux_26 v6_kit 
+chown univa:univa -R /apps/du/600/du_as_6.0.05_linux_26
+if [ $? -ne 1000 ] ; then
+  chmod +x /apps/du/600/v6_kit/bin/clints/unix.clint
+  rm -f ./du_as_6.0.05_linux_26.taz
+fi
+    </command>
+  </commands>
+</template>
