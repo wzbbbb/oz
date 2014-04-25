@@ -36,10 +36,8 @@ echo "nameserver 192.168.115.3" > /etc/resolv.conf
 <!-- echo "NOZEROCONF=yes" >> /etc/sysconfig/network -->
     </command>
     <command name='sshd_config'> 
-sed 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config >/tmp/ttt.config
-cat /tmp/ttt.config > /etc/ssh/sshd_config
-sed 's/HOSTNAME=localhost.localdomain/HOSTNAME=uvms1/' /etc/sysconfig/network > /tmp/ttt.host
-cat /tmp/ttt.host > /etc/sysconfig/network 
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config 
+sed -i 's/HOSTNAME=localhost.localdomain/HOSTNAME=uvms1/' /etc/sysconfig/network 
 hostname uvms1
 echo "127.0.0.1   localhost uvms1" > /etc/hosts
     </command>

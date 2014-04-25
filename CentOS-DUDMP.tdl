@@ -39,10 +39,8 @@ echo "nameserver 192.168.115.3" > /etc/resolv.conf
 <!-- echo "NOZEROCONF=yes" >> /etc/sysconfig/network -->
     </command>
     <command name='sshd_config'> 
-sed 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config >/tmp/ttt.config
-cat /tmp/ttt.config > /etc/ssh/sshd_config
-sed 's/HOSTNAME=localhost.localdomain/HOSTNAME=dudmp1/' /etc/sysconfig/network > /tmp/ttt.host
-cat /tmp/ttt.host > /etc/sysconfig/network 
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config 
+sed -i 's/HOSTNAME=localhost.localdomain/HOSTNAME=dudmp1/' /etc/sysconfig/network 
 hostname dudmp1
 echo "127.0.0.1   localhost dudmp1" > /etc/hosts
 echo "10.0.11.3   uvms1" >> /etc/hosts
@@ -63,6 +61,8 @@ mkdir /windata
 yum -y install nfs-utils.x86_64
 yum -y install glibc.i686
 yum -y install libgcc.i686
+yum -y install libidn.i686
+
 echo "192.168.115.9:/cases   /cases   nfs    auto  0  0" >> /etc/fstab
 echo "192.168.115.9:/windata   /windata   nfs    auto  0  0" >> /etc/fstab
 chmod +x /etc/rc.d/rc.local
@@ -96,6 +96,7 @@ if [ $? -ne 1000 ] ; then
   chmod +x /apps/du/600/v6_kit/bin/clints/unix.clint
   rm -f ./du_as_6.0.05_linux_26.taz
 fi
+yum clean all
     </command>
   </commands>
 </template>
